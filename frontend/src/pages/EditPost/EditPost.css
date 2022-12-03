@@ -1,0 +1,14 @@
+.editPost{
+    margin: 60px auto;
+}
+
+.editPost h1{
+    margin: 20px;
+}
+
+.editPost .editButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 98%;
+}
