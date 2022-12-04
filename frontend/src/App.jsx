@@ -7,12 +7,14 @@ import {
 import "./App.css";
 import React from "react";
 import Dashboard from "./pages/Dashboard/Dashboard";
-// import Posts from "./pages/Posts/Categories";
 import Login from "./pages/Login/Login";
 import { useAuthContext } from "./hooks/useAuthContext";
-import EditPost from "./pages/EditPost/EditPost";
-import Categories from "./pages/Posts/Categories";
+import Categories from "./pages/Categories/Categories";
 import Home from "./pages/Home/Home";
+import Items from "./pages/Items/Items";
+import EditCategorie from "./pages/EditCategorie/EditCategorie";
+import EditItem from "./pages/EditItem/EditItem";
+import ListOfItem from "./pages/ListOfItem/ListOfItem";
 
 
 function App() {
@@ -28,11 +30,15 @@ function App() {
             path="/"
             element={!user || !user1 ? <Home /> : <Navigate to="/dashboard/login" />}
           />
+            <Route
+            path="/listitem/:id"
+            element={!user || !user1 ? <ListOfItem/> : <Navigate to="/dashboard/login" />}
+          />
           <Route
             path="/dashboard/login"
             element={!user || !user1 ? <Login /> : <Navigate to="/dashboard/categories" />}
           />
-          <Route 
+          <Route  
             path="/dashboard"
             element={user || user1 ? <Dashboard /> : <Navigate to="/" />}
           >
@@ -40,9 +46,17 @@ function App() {
               path="categories"
               element={user || user1 ? <Categories /> : <Navigate to="/" />}
             />
+              <Route
+              path="items/:id"
+              element={user || user1 ? <Items /> : <Navigate to="/" />}
+            />
              <Route
-              path="editPost/:id"
-              element={user || user1 ? <EditPost /> : <Navigate to="/" />}
+              path="editcategorie/:id"
+              element={user || user1 ? <EditCategorie /> : <Navigate to="/" />}
+            />
+              <Route
+              path="edititem/:id"
+              element={user || user1 ? <EditItem /> : <Navigate to="/" />}
             />
             
           </Route>

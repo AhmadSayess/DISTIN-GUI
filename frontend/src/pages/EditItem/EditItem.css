@@ -1,0 +1,14 @@
+.editPage{
+    margin: 60px auto;
+}
+
+.editPage h1{
+    margin: 20px;
+}
+
+.editPage .editButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 98%;
+}

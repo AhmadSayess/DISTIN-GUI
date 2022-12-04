@@ -9,7 +9,7 @@ const categorieSchema = new Schema(
     },
 
     image: {
-      type: String,
+      type: Array,
       required: true,
     },
   },

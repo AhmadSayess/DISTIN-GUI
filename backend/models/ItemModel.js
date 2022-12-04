@@ -19,7 +19,7 @@ const itemSchema = new Schema(
     },
 
     image: {
-      type: String,
+      type: Array,
       required: true,
     },
 

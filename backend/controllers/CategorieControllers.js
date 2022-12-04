@@ -1,15 +1,7 @@
 const Model = require("../models/CategorieModel");
 
 class Controller {
-  // getAll(req, res , next ) {
-  //   Model.find({} , (err , response) =>{
-  //     if(err) return next(err);
-  //     res.status(200).send({
-  //       success : true,
-  //       response
-  //     })
-  //   })
-  // }
+
   getAll(req, res, next) {
     Model.aggregate(
       [
@@ -43,17 +35,25 @@ class Controller {
     });
   }
 
-  post(req, res, next) {
-    let body = req.body;
-    let doc = new Model(body);
-    doc.save((err, response) => {
-      if (err) return next(err);
-      res.status(200).send({
-        success: true,
-        response,
-      });
+
+
+  async post(req, res, next) {
+    const reqFiles = [];
+    const url = req.protocol + "://" + req.get("host");
+    for (var i = 0; i < req.files.length; i++) {
+      reqFiles.push(url + "/images/" + req.files[i].filename);
+    }
+    let newPost = await new Model({
+      name: req.body.name,
+      image: reqFiles,
+    });
+    newPost.save({}, (error, response) => {
+      if (error) return next(error);
+      res.status(200).send({ success: true, response });
     });
   }
+  
+
 
   put(req, res, next) {
     let { id } = req.params;

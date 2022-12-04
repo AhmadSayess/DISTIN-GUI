@@ -1,12 +1,12 @@
-.editPost{
+.editPage{
     margin: 60px auto;
 }
 
-.editPost h1{
+.editPage h1{
     margin: 20px;
 }
 
-.editPost .editButton {
+.editPage .editButton {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -32,7 +32,7 @@ function Login() {
           alt=""
         />
         <h1 data-aos="fade-right" data-aos-duration="1500">
-     Distin-Gui    
+          Distin-Gui    
         </h1>
         <h5 data-aos="fade-right" data-aos-duration="1500">
         Distin-Gui  is a market leader in building 
@@ -48,6 +48,7 @@ function Login() {
         
         </div>
         <form onSubmit={handleSubmit}>
+
           <input
             data-aos="fade-left"
             data-aos-duration="1500"
@@ -57,6 +58,7 @@ function Login() {
             name="email"
             placeholder="Enter Your Email"
           />
+
           <input
             data-aos="fade-left"
             data-aos-duration="1500"
@@ -66,6 +68,7 @@ function Login() {
             name="password"
             placeholder="Enter Your Password"
           />
+          
           <button
             data-aos="fade-left"
             data-aos-duration="1500"
@@ -74,6 +77,7 @@ function Login() {
           >
             LOGIN
           </button>
+          
         </form>
       </div>
     </div>

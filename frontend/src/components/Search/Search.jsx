@@ -7,12 +7,16 @@ function Search(props) {
   const { placeholder, data, searched, page } = props;
 
   const onChange = (e) => {
-    if (page === "posts") {
+    if (page === "categories") {
       const newData = data.filter(
         (data) =>
-          data.deal.toString().includes(e.target.value) ||
-          data.login.toString().includes(e.target.value)
-      ); 
+          data.name.includes(e.target.value)); 
+      searched(newData);
+    }
+    if (page === "items") {
+      const newData = data.filter(
+        (data) =>
+          data.name.includes(e.target.value)); 
       searched(newData);
     }
   };

@@ -19,7 +19,7 @@ var usersRouter = require("./routes/users");
 var userRouter = require('./routes/User')
 const itemsRouter = require("./routes/ItemRoute")
 const categorieRouter = require("./routes/CategorieRoute")
-const uploadImgRouter = require('./routes/Uploadimg');
+// const uploadImgRouter = require('./routes/Uploadimg');
 conncetDB();
 
 /// middelwar ///
@@ -42,7 +42,7 @@ app.use("/users", usersRouter);
 app.use("/api/user", userRouter);
 app.use('/api/items',itemsRouter);
 app.use('/api/categorie',categorieRouter)
-app.use('/api/UploadImage', uploadImgRouter);
+// app.use('/api/UploadImage', uploadImgRouter);
 
 // Create error
 app.use(function (req, res, next) {

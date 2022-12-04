@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Posts.css";
+import "./Categories.css";
 import axios from "axios";
 import Loading from "../../components/Loading/Loading";
 import Search from "../../components/Search/Search";
@@ -7,14 +7,8 @@ import Buttons from "../../components/Buttons/Buttons";
 import { styled } from "@mui/material/styles";
 import { Table, TableBody, TableContainer, TableHead, TableRow, } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import AssignmentReturnedIcon from "@mui/icons-material/AssignmentReturned";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import DescriptionIcon from "@mui/icons-material/Description";
 import RingVolumeIcon from "@mui/icons-material/RingVolume";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
@@ -25,7 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //// for a text filed ///
 import Box from "@mui/material/Box";
@@ -59,17 +53,114 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function Categories() {
-  const [postes, setPostes] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [DATA, setDATA] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+  const [name, setName] = useState(""); /// state for the to  add a new project ///
+  const [images, setImages] = useState([]);
   const navigate = useNavigate();
 
 
+  /// function to get All categories ///
+  const getAllCategories = async () => {
+    setLoading(true);
+    await axios
+      .get(`http://localhost:2000/api/categorie`)
+      .then((res) => {
+        if (res.status === 200) {
+          setCategories(res.data.categories);
+          setDATA(res.data.categories);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+  /// function to get All categories ///
 
 
+  ////  function to add a categories ///
+  const HandeladdCategorie = async (e) => {
+    e.preventDefault();
+    const image_array = Object.values(images.images);
+    const formData = new FormData();
+    image_array.forEach((file) => {
+      formData.append("image", file);
+    });
+    formData.append("name", name);
+    await axios
+      .post("http://localhost:2000/api/categorie/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setName("");
+        setImages("");
+        setOpen(false);
+        Swal.fire({
+          title: " Adedd Successfully",
+          icon: "success",
+          timer: 2000,
+          timerProgressBar: true,
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+        });
+        getAllCategories();
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  ////  function to add a categories ///
 
-  /// function to get All postes ///
+
+  ////  function to edit a categories ///
+  const HandelEditCategorie = (id) => {
+    navigate(`/dashboard/editcategorie/${id}`);
+  };
+  ////  function to edit a categories ///
+
+  ////  function to delet a categories ///
+  const HandelDeleteCategorie = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      showCancelButton: true,
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:2000/api/categorie/${id}`)
+          .then((res) => {
+            setLoading(true);
+            Swal.fire({
+              title: " Deleted Is Successfully",
+              icon: "success",
+              timer: 2000,
+              timerProgressBar: true,
+              toast: true,
+              position: "top-function",
+              showConfirmButton: false,
+            });
+            getAllCategories();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    })
+  };
+  ////  function to delet a categories ///
 
   const [open, setOpen] = React.useState(false);
 
@@ -79,25 +170,31 @@ function Categories() {
 
   const handleClose = () => {
     setOpen(false);
+    setName("");
+    setImages("");
+
   };
 
   return (
     <div className="post">
 
       <div className="d-flex justify-content-around">
-        {DATA && <Search
-          placeholder="Search for categories && items"
-          data={DATA && DATA}
-          searched={setPostes}
-          page={"posts"}
-        />}
+
+        <Search
+          placeholder="Search for categories "
+          data={DATA}
+          searched={setCategories}
+          page={"categories"}
+        />
+
         <Buttons
           buttonStyle="btn--success--solid"
           buttonSize="btn-lg"
-          text={"Add Post"}
+          text={"Add Categories"}
           variant="outlined"
           onClick={handleClickOpen}
         />
+
         <Dialog
           open={open}
           TransitionComponent={Transition}
@@ -105,12 +202,12 @@ function Categories() {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <form onSubmit={''}>
-            <DialogTitle>{"Add A New Post"}</DialogTitle>
+          <form onSubmit={HandeladdCategorie}>
+
+            <DialogTitle>{"Add A New Category"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
                 <Box
-                  // component="form"
                   sx={{
                     "& > :not(style)": { m: 1.5, width: "58ch" },
                   }}
@@ -119,20 +216,22 @@ function Categories() {
                 >
                   <TextField
                     id="standard-basic"
-                    label="Add Your icon "
+                    label="Add Categorie Name "
                     type='string'
                     required
-                    // value={deal}
-                    // onChange={(e) => setDeal(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                   <TextField
                     id="standard-basic"
                     type='file'
                     required
-                    // value={login}
-                    // onChange={(e) => setLogin(e.target.value)}
+                    inputProps={{
+                      multiple: true,
+                    }}
+                    // value={images}
+                    onChange={(e) => setImages({ images: e.target.files })}
                   />
-
 
                 </Box>
               </DialogContentText>
@@ -148,11 +247,13 @@ function Categories() {
               <Buttons
                 buttonStyle="btn--success--solid"
                 buttonSize="btn-lg"
-                text={"New post"}
+                text={"New Categorie"}
                 type='submit'
               />
             </DialogActions>
+
           </form>
+
         </Dialog>
       </div>
 
@@ -164,22 +265,25 @@ function Categories() {
           <Table sx={{ minWidth: 400 }} aria-label="contained table">
             <TableHead>
               <TableRow>
+
                 <StyledTableCell align="left">
                   <LocalOfferIcon style={{ width: "22px" }} /> &nbsp;
                   <span style={{ fontWeight: "bold", verticalAlign: "bottom" }}>
                     Icon
                   </span>
                 </StyledTableCell>
+
                 <StyledTableCell align="left">
                   <CalendarMonthIcon style={{ width: "22px" }} /> &nbsp;
                   <span style={{ fontWeight: "bold", verticalAlign: "bottom" }}>
                     Name
                   </span>
                 </StyledTableCell>
+
                 <StyledTableCell align="left">
                   <CalendarMonthIcon style={{ width: "22px" }} /> &nbsp;
                   <span style={{ fontWeight: "bold", verticalAlign: "bottom" }}>
-                  List catrgories
+                    List Items
                   </span>
                 </StyledTableCell>
 
@@ -189,6 +293,7 @@ function Categories() {
                     Action
                   </span>
                 </StyledTableCell>
+
               </TableRow>
             </TableHead>
 
@@ -196,32 +301,34 @@ function Categories() {
               <Loading />
             ) : (
               <TableBody>
-                {postes &&
-                  postes.map((item, index) => {
+                {categories &&
+                  categories.map((item, index) => {
                     return (
                       <StyledTableRow key={index} className="main_row">
+
                         <StyledTableCell
                           component="th"
                           scope="row"
                           align="center"
                         >
-                          {/* {item.deal} */}
+                          <img src={item.image} style={{ width: "30px", "border-radius": "70%" }} />
                         </StyledTableCell>
+
                         <StyledTableCell
                           component="th"
                           scope="row"
                           align="center"
                         >
-                          {/* {item.login} */}
+                          {item.name}
                         </StyledTableCell>
+
                         <StyledTableCell
                           component="th"
                           scope="row"
                           align="center"
                         >
-                          {/* {item.entry} */}
+                          <Link to={"/dashboard/items/" + item._id}  >Open List</Link>
                         </StyledTableCell>
-                        
 
                         <StyledTableCell align="left" style={{ padding: 0 }}>
                           <div className="button_table">
@@ -229,17 +336,18 @@ function Categories() {
                               buttonStyle="btn--success--solid"
                               buttonSize="btn-md"
                               icon={<EditIcon />}
-                              // onClick={() => HandelEditPost(item._id)}
+                              onClick={() => HandelEditCategorie(item._id)}
                             />
 
                             <Buttons
                               buttonStyle="btn--danger--solid"
                               buttonSize="btn-md"
                               icon={<DeleteOutlineIcon />}
-                              // onClick={() => HandelDeletePost(item._id)}
+                              onClick={() => HandelDeleteCategorie(item._id)}
                             />
                           </div>
                         </StyledTableCell>
+                        
                       </StyledTableRow>
                     );
                   })}

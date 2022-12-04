@@ -1,0 +1,20 @@
+hello 
+
+
+To start backend and frontend = npm start
+Before start you need to install the package in the backend end frontend  = npm install -> after that you can to run the front and back = npm start
+
+
+{
+    "email": "user@gmail.com",
+    "password": "Ahmad1998!@#$"
+}
+{
+    "email": "user1@gmail.com",
+    "password": "Ahmad1998!@#$"
+}
+here ther are the email and the password to login for this route : http://localhost:3000/dashboard/login
+
+after login  we have one pages  it's all categoreis and you can add edit and delete and search and we have a word open list that contain all item for the categore you clicked and you can add and edit and delete and search 
+
+and soory i can't abel to complete reassign items to categories, beacuse the day i sent the task i was at the hospital but i'm excited to work with you 
